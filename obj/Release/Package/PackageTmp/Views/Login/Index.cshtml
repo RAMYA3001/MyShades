@@ -1,0 +1,93 @@
+﻿@{
+    Layout = null;
+}
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>My Shade | Login</title>
+
+    <!-- Google Font: Source Sans Pro -->
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Source+Sans+Pro:300,400,400i,700&display=fallback">
+    <!-- Font Awesome -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css">
+    <!-- Bootstrap 4 -->
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+    <!-- AdminLTE App -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/admin-lte/3.0.5/css/adminlte.min.css">
+</head>
+<body class="hold-transition login-page">
+    <div class="login-box">
+        <div class="card card-outline card-primary">
+            <div class="card-header text-center">
+                <img src="~/dist/img/ColoursGalore-Wizard-Logo.jpeg" alt="Logo" class="img-fluid" style="max-width: 150px;">
+                <h1 class="h1"><b>My Shades</b></h1>
+            </div>
+            
+            <div class="card-body">
+                <p class="login-box-msg">Sign in to start your session</p>
+
+                <div class="input-group mb-3">
+                    <input type="text" class="form-control" id="Username" placeholder="User Name">
+                    <div class="input-group-append">
+                        <div class="input-group-text">
+                            <span class="fas fa-user"></span>
+                        </div>
+                    </div>
+                </div>
+                <div class="input-group mb-3">
+                    <input type="password" class="form-control" id="txtPassword" placeholder="Password">
+                    <div class="input-group-append">
+                        <div class="input-group-text">
+                            <span class="fas fa-eye" id="togglePassword"></span>
+                        </div>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-4">
+                        <button type="button" id="btnsubmit" class="btn btn-primary btn-block">Sign In</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- jQuery -->
+    <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
+    <!-- Bootstrap 4 -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/2.10.2/umd/popper.min.js" integrity="sha512-8P4/2Id+aK3ITy4OjD5Tt3qT2s4/4i3FLBqkt55pTSGDtP8Bf6A0+LeT6LzV/i1uACJfTg4iiGWC+7f+t3o2mw==" crossorigin="anonymous"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+    <!-- AdminLTE App -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/admin-lte/3.0.5/js/adminlte.min.js"></script>
+
+    <script>
+        $(document).ready(function () {
+            $('#togglePassword').on('click', function () {
+                var passwordField = $('#txtPassword');
+                var passwordFieldType = passwordField.attr('type');
+
+                if (passwordFieldType === 'password') {
+                    passwordField.attr('type', 'text');
+                    $(this).removeClass('fa-eye').addClass('fa-eye-slash');
+                } else {
+                    passwordField.attr('type', 'password');
+                    $(this).removeClass('fa-eye-slash').addClass('fa-eye');
+                }
+            });
+
+            $('#btnsubmit').on('click', function () {
+                var username = $('#Username').val();
+                var password = $('#txtPassword').val();
+
+                if (username == "Admin" && password == "Admin12#") {
+                    window.location.href = "/Home/ShadeCardView";
+                } else {
+                    alert("Invalid Credential!");
+                }
+            });
+        });
+    </script>
+</body>
+</html>

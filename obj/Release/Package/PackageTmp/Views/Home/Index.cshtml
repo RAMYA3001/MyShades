@@ -1,0 +1,432 @@
+﻿@*@{
+    
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}*@
+
+<body>
+    <style>
+
+        body {
+            margin: 10px;
+            padding: 10px;
+            font-family: Arial, sans-serif;
+            text-align: center;
+        }
+
+        #canvasContainer {
+            display: flex;
+            justify-content: space-around;
+            padding: 0px;
+        }
+
+        canvas {
+            border: 0px solid #000;
+            max-width: 30%;
+            height: 30%;
+            padding: 5px;
+        }
+
+        body {
+            margin: 0;
+            padding: 0;
+            font-family: Arial, sans-serif;
+        }
+
+        .panel {
+            box-sizing: border-box;
+            width: 100%;
+            padding: 20px;
+            text-align: center;
+            color: #fff;
+        }
+
+        #panel1 {
+            background-color: #3498db;
+        }
+
+        #panel2 {
+            background-color: #2ecc71;
+        }
+
+        @@media only screen and (min-width: 600px) {
+            /* Responsive layout for screens wider than 600px */
+            .panel {
+                width: 50%;
+                display: inline-block;
+            }
+        }
+
+        .image-picker {
+            width: 14%;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+            overflow: hidden;
+            height: auto;
+        }
+
+            .image-picker img {
+                width: 25%;
+                height: auto;
+                display: block;
+            }
+
+        .upload-btn-wrapper {
+            position: relative;
+            overflow: hidden;
+            display: inline-block;
+        }
+
+        .btn {
+            border: 1px solid gray;
+            color: black;
+            background-color: dodgerblue;
+            padding: 10px 10px;
+            border-radius: 8px;
+            font-size: 14px;
+            font-family: Arial;
+            font-weight: bold;
+        }
+
+        .upload-btn-wrapper input[type=file] {
+            font-size: 100px;
+            position: absolute;
+            left: 0;
+            top: 0;
+            opacity: 0;
+        }
+
+        .upload-btn-wrapper .btn:hover {
+            border-color: #333;
+            color: #333;
+        }
+
+        .image-name {
+            font-size: 18px;
+            font-weight: bold;
+            margin-top: 10px;
+        }
+    </style>
+    <br />
+    <br />
+    <br />
+
+
+    <div style="width:100%">
+
+        
+
+        <div class="image-picker col-lg-2">
+
+            <div class="upload-btn-wrapper">
+                <button class="btn">Choose Image 1</button>
+                @*<input type="file" name="image" id="image" accept="image/*" onchange="displayImage()">*@
+                <input onchange="readURL1(this);" type="file" id="fileInput1" name="fileInput" accept="image/*" title="Select Image1">
+            </div>
+        </div>
+        <div class="col-lg-4">
+        </div>
+        <div class="image-picker ">
+
+            <div class="upload-btn-wrapper">
+                <button class="btn">Choose Image 2</button>
+                @*<input type="file" name="image" id="image" accept="image/*" onchange="displayImage()">*@
+                <input onchange="readURL(this);" type="file" id="fileInput" name="image" accept="image/*" title="Select Image2">
+            </div>
+        </div>
+
+
+    </div>
+
+   
+
+    <div id="canvasContainer">
+
+        <canvas id="myCanvas"></canvas>
+
+
+        <canvas id="1myCanvas"></canvas>
+    </div>
+    <table>
+        <tr>
+            <td class="col-lg-4"> <p style="position:center;color:orangered;" id="imageName2"></p></td>
+            <td></td>
+            <td></td>
+            <td class="col-lg-4"><p style="position: center; color: orangered;" id="imageName1"></p></td>
+        </tr>
+    </table>
+    <table hidden>
+        <tbody>
+            <tr>
+                <td class="col-md-4">
+                    <div id="panel1" class="panel">
+
+
+                        <br />
+                        <br />
+
+                        <button id="toggleCanvasDisplay" hidden onclick="toggleCanvas()">Hide canvas</button>
+                        <button id="toggleDataUrl" hidden onclick="toggleDataUrl()">Hide dataUrl</button>
+
+                        <br />
+                        <br />
+<textarea id="dataUrl" hidden rows="4" cols="100">
+</textarea>
+
+                        <br />
+                        @*<canvas id="myCanvas"></canvas>*@
+
+
+                    </div>
+
+                </td>
+                <td class="col-lg-2">
+                    <div id="panel1" class="panel">
+
+
+                        @*<div>
+                                <h4>Upload Photo 2</h4>
+
+                                <input onchange="readURL1(this);" type="file" id="fileInput1" name="fileInput" accept="image/*">
+                            </div>*@
+
+
+                        @*<br />
+                            <br />
+
+                            <button id="toggleCanvasDisplay" onclick="toggleCanvas()">Hide canvas</button>
+                            <button id="toggleDataUrl" hidden onclick="toggleDataUrl1()">Hide dataUrl</button>
+
+                            <br />
+                            <br />*@
+                        @*<textarea id="dataUrl" hidden rows="4" cols="100">
+                            </textarea>*@
+
+                        <br />
+                        @*<canvas id="1myCanvas"></canvas>*@
+
+                    </div>
+                </td>
+            </tr>
+        </tbody>
+    </table>
+
+    <button hidden type="button" id="btnsent"> Sent Message</button>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.1/jquery.min.js"></script>
+
+    <script>
+
+
+
+
+    var phno = $("#Phone").val();
+    var path = $("#img").val();
+            var Caption = $("#fileInput").val();
+
+
+
+    function saveFile(file) {
+        var phno1 = $("#Phone").val();
+        var formData = new FormData();
+        formData.append('file', file);
+        formData.append('no', phno);
+       
+        alert(formData);
+        $.ajax({
+            url: '@Url.Action("SaveFile")', // Replace with your MVC controller action URL
+            type: 'POST',
+            data: formData,
+            processData: false,
+            contentType: false,
+            success: function (response) {
+                alert('File saved successfully.');
+            },
+            error: function (xhr, status, error) {
+                alert('Error saving file: ' + error);
+            }
+        });
+    }
+
+
+
+    var URLsrc = "";
+    $("#btnsent").on("click", function () {
+
+        var fileInput = document.getElementById('fileInput');
+
+        var file = fileInput.files[0];
+
+        if (file) {
+            alert("call1");
+            saveFile(file);
+            alert("call2");
+        }
+
+
+
+
+
+
+        $.ajax({
+                type: "POST",
+                url: '@Url.Action("About")',
+               // data: '{std: ' + JSON.stringify(std) + '}',
+            data: '{ "no":' + phno + ', "captn":"' + Caption + '","imgURL":"' + URLsrc + '" }',
+                dataType: "json",
+                contentType: "application/json; charset=utf-8",
+                success: function () {
+                   // alert("Data has been added successfully.");
+                    LoadData();
+                },
+                error: function () {
+                    alert("Error while inserting data");
+                }
+         });
+    });
+
+
+    function readURL(input) {
+        if (input.files && input.files[0]) {
+            var reader = new FileReader();
+
+            reader.addEventListener(
+                "load",
+                function () {
+                    var avatarImg = new Image();
+                    var src = reader.result;
+                    avatarImg.src = src;
+                    URLsrc = src;
+
+                    document.getElementById("dataUrl").innerText = src;
+                    avatarImg.onload = function () {
+                        var c = document.getElementById("1myCanvas");
+                        var ctx = c.getContext("2d");
+                        ctx.canvas.width = avatarImg.width;
+                        ctx.canvas.height = avatarImg.height;
+                        ctx.drawImage(avatarImg, 0, 0);
+
+                        var imageName = input.files[0].name;
+                        ctx.font = "16px Arial";
+                        ctx.fillStyle = "#000";
+                        ctx.textAlign = "center";
+                        ctx.fillText(imageName, c.width / 2, c.height - 10);
+
+                        $('#imageName1').text("Photo 2 : " + imageName);
+                    };
+                },
+                false
+            );
+
+            reader.readAsDataURL(input.files[0]);
+
+        }
+    }
+
+    function toggleCanvas() {
+        var canvas = document.getElementById("myCanvas");
+        if (canvas.style.display == "none") {
+            canvas.style.display = "block";
+            document.getElementById("toggleCanvasDisplay").innerText = "Hide canvas";
+        }
+        else {
+            canvas.style.display = "none";
+            document.getElementById("toggleCanvasDisplay").innerText = "Show canvas";
+        }
+    }
+
+    function toggleDataUrl() {
+        var area = document.getElementById("dataUrl");
+        if (area.style.display == "none") {
+            area.style.display = "block";
+            document.getElementById("toggleDataUrl").innerText = "Hide data url";
+        }
+        else {
+            area.style.display = "none";
+            document.getElementById("toggleDataUrl").innerText = "Show data url";
+        }
+    }
+
+       
+        function readURL1(input) {
+            if (input.files && input.files[0]) {
+                var reader = new FileReader();
+
+                var img1 = $("#fileInput").val();
+
+                reader.addEventListener(
+                    "load",
+                    function () {
+                        var avatarImg = new Image();
+                        var src = reader.result;
+                        avatarImg.src = src;
+                        URLsrc = src;
+                        document.getElementById("dataUrl").innerText = src;
+                        avatarImg.onload = function () {
+                            var c = document.getElementById("myCanvas");
+                            var ctx = c.getContext("2d");
+                            ctx.canvas.width = avatarImg.width;
+                            ctx.canvas.height = avatarImg.height;
+                            ctx.drawImage(avatarImg, 0, 0);
+                            var imageName = input.files[0].name;
+                            ctx.font = "16px Arial";
+                            ctx.fillStyle = "#000";
+                            ctx.textAlign = "center";
+                            ctx.fillText(imageName, c.width / 2, c.height - 10);
+                            ;
+                            $('#imageName2').text("Photo 1 : " + imageName);
+                        };
+                    },
+                    false
+                );
+
+                reader.readAsDataURL(input.files[0]);
+            }
+        }
+
+
+        const canvas = document.getElementById('fileInput');
+        const ctx = canvas.getContext('2d');
+
+        let scale = 1;
+        let offsetX = 0;
+        let offsetY = 0;
+
+        function draw() {
+            ctx.clearRect(0, 0, canvas.width, canvas.height);
+            ctx.fillStyle = '#00F';
+            ctx.fillRect(50, 50, 100, 100);
+        }
+
+        function zoom(event) {
+            const delta = event.deltaY || event.detail || event.wheelDelta;
+
+            if (delta > 0) {
+                scale *= 1.1;
+            } else {
+                scale *= 0.9;
+            }
+
+            draw();
+        }
+
+        function pan(event) {
+            if (event.buttons === 1) {
+                offsetX += event.movementX;
+                offsetY += event.movementY;
+                draw();
+            }
+        }
+
+        canvas.addEventListener('wheel', zoom);
+        canvas.addEventListener('mousemove', pan);
+
+        draw();
+
+
+
+
+
+
+
+
+    </script>
+</body>
